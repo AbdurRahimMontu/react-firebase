@@ -12,10 +12,11 @@ const SignUp = () => {
         e.preventDefault();
         const form = e.target;
         const name = form.name.value;
+        const photo = e.target.photo.value;
         const email = form.email.value;
         const password = form.password.value;
 
-        console.log({name, email, password});
+        console.log({name, photo, email, password});
       // if(password.length < 6){
       //   toast.warning("Password should be at least 6 digit");
       //   return;
@@ -32,7 +33,7 @@ const SignUp = () => {
         .then((res)=>{
          const currentUser = res.user;
          updateProfile(currentUser, {
-        displayName: name,
+        displayName: name, photoURL: photo
       })
           toast.success("SignUp Successfully")
         })
@@ -54,7 +55,7 @@ const SignUp = () => {
           <h1 className="text-3xl text-center font-bold">SignUp now!</h1>
 
 <input type="text" className="input outline-none" name="name" placeholder="Enter Your Name"/>
-<input type='url' className="input outline-none" name="url" placeholder="Photo URL"/>
+<input type='url' className="input outline-none" name="photo" placeholder="Photo URL"/>
 <input type="email" className="input outline-none" name="email" placeholder="Enter Your Email"/>
 
 <div className='relative'>

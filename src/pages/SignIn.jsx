@@ -4,8 +4,12 @@ import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router';
 import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebase.config';
+import { GoogleAuthProvider } from "firebase/auth";
+
+const googleProvider = new GoogleAuthProvider();
+
 
 const SignIn = () => {
      const [show, setShow] = useState(false)
@@ -41,6 +45,19 @@ const SignIn = () => {
             })
     
         }
+        const handleGoogleSignIn=()=>{
+          signInWithPopup(auth, googleProvider)
+         .then((res)=>{
+             const currentUser = res.user;
+              setUser(currentUser);
+              toast.success("SignIn Successfully")
+            })
+            .catch((error)=>{
+              console.log(error);
+              toast.error(error.message)
+            })
+        }
+       
       const handleSignOut=()=>{
        signOut(auth)
            .then((res)=>{
@@ -74,7 +91,7 @@ const SignIn = () => {
          
             <img className="w-10 h-10 rounded-full"
             alt="Tailwind CSS Navbar component"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            src={user.photoURL} />
          
           <h2>{user.displayName}</h2>
          <h3>{user.email}</h3> 
@@ -118,7 +135,7 @@ const SignIn = () => {
       
 
        <div className='space-y-2'>
-<button className="btn w-full hover:bg-base-300 bg-white text-black border-[#e5e5e5]">
+<button onClick={handleGoogleSignIn} className="btn w-full hover:bg-base-300 bg-white text-black border-[#e5e5e5]">
  <FcGoogle/>
   Login with Google
 </button>
