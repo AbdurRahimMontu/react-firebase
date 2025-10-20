@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { auth } from '../firebase/firebase.config';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword,updateProfile } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SignUp = () => {
   const [show, setShow] = useState(false)
+
     const handleSignUp=(e)=>{
         e.preventDefault();
         const form = e.target;
+        const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
 
-        console.log({email, password});
+        console.log({name, email, password});
       // if(password.length < 6){
       //   toast.warning("Password should be at least 6 digit");
       //   return;
@@ -28,7 +30,10 @@ const SignUp = () => {
 
         createUserWithEmailAndPassword(auth, email, password)
         .then((res)=>{
-          console.log(res);
+         const currentUser = res.user;
+         updateProfile(currentUser, {
+        displayName: name,
+      })
           toast.success("SignUp Successfully")
         })
         .catch((error)=>{
@@ -37,6 +42,7 @@ const SignUp = () => {
         })
 
     }
+
     return (
         <div className='bg-base-200 '>
          <div className="hero min-h-[calc(100vh-124px)]">
@@ -47,7 +53,7 @@ const SignUp = () => {
         <form onSubmit={handleSignUp} className="fieldset">
           <h1 className="text-3xl text-center font-bold">SignUp now!</h1>
 
-<input type="text" className="input outline-none" name="text" placeholder="Enter Your Name"/>
+<input type="text" className="input outline-none" name="name" placeholder="Enter Your Name"/>
 <input type='url' className="input outline-none" name="url" placeholder="Photo URL"/>
 <input type="email" className="input outline-none" name="email" placeholder="Enter Your Email"/>
 

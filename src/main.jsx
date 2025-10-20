@@ -9,6 +9,6 @@ import { ToastContainer } from 'react-toastify'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
 <RouterProvider router={Routes}></RouterProvider>
- <ToastContainer />
+ <ToastContainer position="bottom-right"/>
   </StrictMode>,
 )

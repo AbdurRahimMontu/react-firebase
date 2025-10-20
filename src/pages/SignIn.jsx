@@ -4,11 +4,12 @@ import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router';
 import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebase.config';
 
 const SignIn = () => {
      const [show, setShow] = useState(false)
+       const [user, setUser] = useState(null)
         const handleSignIn=(e)=>{
             e.preventDefault();
             const form = e.target;
@@ -30,7 +31,8 @@ const SignIn = () => {
     
             signInWithEmailAndPassword(auth, email, password)
             .then((res)=>{
-              console.log(res);
+             const currentUser = res.user;
+              setUser(currentUser);
               toast.success("SignIn Successfully")
             })
             .catch((error)=>{
@@ -39,14 +41,66 @@ const SignIn = () => {
             })
     
         }
+      const handleSignOut=()=>{
+       signOut(auth)
+           .then((res)=>{
+              console.log(res);
+              toast.success("SigOut Successfully", {position:"bottom-right"})
+              setUser(null)
+            }) .catch((error)=>{
+              console.log(error);
+              toast.error(error.message)
+            })
+      }
+
     return (
+
+
+      
         <div className=' bg-base-200'>
          <div className="hero min-h-[calc(100vh-124px)]">
 
-
     <div className="card bg-base-100 w-full  max-w-sm  shadow-2xl">
       <div className="card-body">
-        <form onSubmit={handleSignIn} className="fieldset ">
+   {
+    user? (
+        <div className="">
+
+      <ul
+   
+        className="flex flex-col gap-3 bg-base-100 rounded-box z-1  py-1 shadow">
+     
+        <div className='bg-base-200 flex flex-col justify-center items-center  p-2'>
+         
+            <img className="w-10 h-10 rounded-full"
+            alt="Tailwind CSS Navbar component"
+            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+         
+          <h2>{user.displayName}</h2>
+         <h3>{user.email}</h3> 
+        </div>
+    
+        
+        <li className='px-4'><a>Profile</a></li>
+        <li className='px-4'><a>Settings</a></li>
+        <hr  /> 
+        <button onClick={handleSignOut} className=' btn-accent btn'>
+          Sign Out
+          </button>
+      </ul>
+    </div>
+    // <div>
+    //  <div className='bg-base-200 flex flex-col justify-center items-center  p-2'>
+    // <img className="w-10 h-10 rounded-full"alt="Profile Image"
+    //   src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
+         
+    // <h2>{user?.displayName}</h2>
+    // <h3>{user.email}</h3> 
+    // </div>
+    
+    // </div>
+    ):(
+                       <form onSubmit={handleSignIn} className="fieldset ">
           <h1 className="text-3xl text-center font-bold">SignIn now!</h1>
 
 <input type="email" className="input outline-none" name="email" placeholder="Enter Your Email"/>
@@ -59,7 +113,9 @@ const SignIn = () => {
 
           <div><Link className="link link-hover">Forgot password?</Link></div>
           <button className="btn btn-neutral mt-4">SignIn</button>
-        </form>
+       
+    
+      
 
        <div className='space-y-2'>
 <button className="btn w-full hover:bg-base-300 bg-white text-black border-[#e5e5e5]">
@@ -73,8 +129,20 @@ const SignIn = () => {
        </div>
 
         <h3>Don't have an Account ? please <Link to="/signUp" className='text-blue-600 font-bold underline'>SignUp</Link></h3>
+
+ </form>
+    )
+   }
+      
+
+
       </div>
+
     </div>
+       
+     
+
+
   </div>
 </div>
       
