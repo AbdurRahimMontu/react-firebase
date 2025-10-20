@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router';
+import { auth } from '../firebase/firebase.config';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-toastify';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SignUp = () => {
-    const handleSubmit=(e)=>{
+  const [show, setShow] = useState(false)
+    const handleSignUp=(e)=>{
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
 
         console.log({email, password});
+      // if(password.length < 6){
+      //   toast.warning("Password should be at least 6 digit");
+      //   return;
+      // }
+      // password validation 
+      const regularExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{};:'",.<>\/?\\|]).{6,}$/;
+  
+      if(!regularExp.test(password)){
+        toast.error( "Password must be at least 6 characters long and include uppercase, lowercase, number and one special character.");
+        return;
+      }
+
+        createUserWithEmailAndPassword(auth, email, password)
+        .then((res)=>{
+          console.log(res);
+          toast.success("SignUp Successfully")
+        })
+        .catch((error)=>{
+          console.log(error);
+          toast.error(error.message)
+        })
+
     }
     return (
         <div className='bg-base-200 '>
@@ -17,13 +44,19 @@ const SignUp = () => {
 
     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
       <div className="card-body">
-        <form onSubmit={handleSubmit} className="fieldset">
+        <form onSubmit={handleSignUp} className="fieldset">
           <h1 className="text-3xl text-center font-bold">SignUp now!</h1>
 
 <input type="text" className="input outline-none" name="text" placeholder="Enter Your Name"/>
 <input type='url' className="input outline-none" name="url" placeholder="Photo URL"/>
 <input type="email" className="input outline-none" name="email" placeholder="Enter Your Email"/>
-<input type="password" className="input outline-none" name="password" placeholder="Password"/>
+
+<div className='relative'>
+  <input  type={show?"text" :"password"} className="input outline-none" name="password" placeholder="Password"/>
+  <span onClick={()=>setShow(!show)} className='top-2 right-7 absolute cursor-pointer z-50'>
+   {show? <FaEye size={20}/> : <FaEyeSlash size={20}/> }
+  </span>
+</div>
 
           <div><Link className="link link-hover">Forgot password?</Link></div>
           <button className="btn btn-neutral mt-4">SignUp</button>
