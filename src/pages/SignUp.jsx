@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { auth } from '../firebase/firebase.config';
-import { createUserWithEmailAndPassword,updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword,sendEmailVerification,updateProfile } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { firebaseErrorMessages } from '../firebase/firebaseErrorCodes';
+
 
 const SignUp = () => {
   const [show, setShow] = useState(false)
@@ -28,6 +30,7 @@ const SignUp = () => {
         toast.error( "Password must be at least 6 characters long and include uppercase, lowercase, number and one special character.");
         return;
       }
+          
 
         createUserWithEmailAndPassword(auth, email, password)
         .then((res)=>{
@@ -35,11 +38,16 @@ const SignUp = () => {
          updateProfile(currentUser, {
         displayName: name, photoURL: photo
       })
+      sendEmailVerification(auth.currentUser)
+         .then(() => {
+
+  });
           toast.success("SignUp Successfully")
         })
         .catch((error)=>{
-          console.log(error);
-          toast.error(error.message)
+          const message = firebaseErrorMessages[error.code] || "An unknown error occurred.";
+           toast.warning(message);
+           console.error(error.code, error.message);
         })
 
     }
@@ -65,7 +73,7 @@ const SignUp = () => {
   </span>
 </div>
 
-          <div><Link className="link link-hover">Forgot password?</Link></div>
+          <div><button  type='button' className="link link-hover">Forgot password?</button></div>
           <button className="btn btn-neutral mt-4">SignUp</button>
         </form>
         <h3>Al ready have an Account please <Link to="/signIn" className='text-blue-600 font-bold underline'>SignIn</Link></h3>

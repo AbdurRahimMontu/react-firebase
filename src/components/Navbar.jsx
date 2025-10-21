@@ -37,18 +37,17 @@ const Navbar = () => {
 
 
   {/* navbar end */}
-  <div className="space-x-2 flex">
-    <Link to="/signIn" className="btn btn-active btn-primary px-8">Login</Link>
-     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="cursor-pointer">
-        
+  <div className="space-x-2 flex items-center">
+    <Link to="/signIn" className="btn btn-active   btn-primary px-8">Login</Link>
+     {/* <div className="border dropdown dropdown-end">
+      <div tabIndex={0} role="button" className="cursor-pointer   border">
           <img className="w-10 h-10 rounded-full"
             alt="Tailwind CSS Navbar component"
             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
  
       </div>
       <ul
-        tabIndex="-1"
+       tabIndex={-1}
         className=" dropdown-content flex flex-col gap-3 bg-base-100 rounded-box z-1  py-1 mt-6 w-60 h-96 shadow">
      
         <div className='bg-base-200 flex flex-col justify-center items-center  p-2'>
@@ -67,7 +66,34 @@ const Navbar = () => {
         <hr  /> 
         <li className=' btn-accent btn'><a>Logout</a></li>
       </ul>
-    </div>
+    </div> */}
+    <div className=" dropdown-end dropdown">
+{/*   */}
+  <div tabIndex={0} role="button" className="cursor-pointer ">
+    <img className="w-10 h-10 rounded-full"
+        alt="Tailwind CSS Navbar component"
+        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+  </div>
+
+
+
+  <ul tabIndex="-1" className="dropdown-content p-5 border bg-base-100 mt-5 rounded-box z-1 w-60 h-100 shadow-sm">
+    <span className='flex flex-col items-center p-5 '>
+        <img className="w-10 h-10 rounded-full"
+            alt="Tailwind CSS Navbar component"
+            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />        
+          <h2>Abdur Rahim</h2>
+         <h3>abdurrahim9977@gmail.com</h3> 
+    </span>
+        <hr className='my-2'/> 
+        <li className=''><Link className='text-blue-600 underline'>Profile</Link></li>
+        <li className=''><Link className='text-blue-600 underline'>Settings</Link></li>
+        <hr className='my-2'/> 
+        <li className=' btn-accent btn w-full'><button>Logout</button></li>
+  </ul>
+
+
+</div>
   </div>
 </div>
   </div>

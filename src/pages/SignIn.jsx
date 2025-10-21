@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaGithub, FaGoogle } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router';
 import { toast } from 'react-toastify';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+import { sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebase.config';
 import { GoogleAuthProvider } from "firebase/auth";
 
@@ -14,10 +14,12 @@ const googleProvider = new GoogleAuthProvider();
 const SignIn = () => {
      const [show, setShow] = useState(false)
        const [user, setUser] = useState(null)
+       const emailRef = useRef(null)
         const handleSignIn=(e)=>{
             e.preventDefault();
             const form = e.target;
             const email = form.email.value;
+        
             const password = form.password.value;
     
             console.log({email, password});
@@ -58,6 +60,20 @@ const SignIn = () => {
             })
         }
        
+    const handlePasswordReset=()=>{
+      const email = emailRef.current.value
+      sendPasswordResetEmail(auth, email )
+  .then(() => {
+       toast.success("Password reset email sent!")
+  })
+  .catch((error)=>{
+              console.log(error);
+              toast.error(error.message)
+            })
+    }
+
+
+
       const handleSignOut=()=>{
        signOut(auth)
            .then((res)=>{
@@ -120,7 +136,7 @@ const SignIn = () => {
                        <form onSubmit={handleSignIn} className="fieldset ">
           <h1 className="text-3xl text-center font-bold">SignIn now!</h1>
 
-<input type="email" className="input outline-none" name="email" placeholder="Enter Your Email"/>
+<input type="email" className="input outline-none"  ref={emailRef} name="email" placeholder="Enter Your Email"/>
 <div className='relative'>
   <input  type={show?"text" :"password"} className="input outline-none" name="password" placeholder="Password"/>
   <span onClick={()=>setShow(!show)} className='top-2 right-7 absolute cursor-pointer z-50'>
@@ -128,7 +144,7 @@ const SignIn = () => {
   </span>
 </div>
 
-          <div><Link className="link link-hover">Forgot password?</Link></div>
+          <div><button type='button' onClick={handlePasswordReset} className="link link-hover">Forgot password?</button></div>
           <button className="btn btn-neutral mt-4">SignIn</button>
        
     
