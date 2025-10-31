@@ -77,7 +77,7 @@ const Navbar = () => {
 
 
 
-  <ul tabIndex="-1" className="dropdown-content p-5 border bg-base-100 mt-5 rounded-box z-1 w-60 h-100 shadow-sm">
+  <ul tabIndex="-1" className="dropdown-content  p-5 border bg-base-100 mt-5 rounded-box z-200 w-60 h-100 shadow-sm">
     <span className='flex flex-col items-center p-5 '>
         <img className="w-10 h-10 rounded-full"
             alt="Tailwind CSS Navbar component"
